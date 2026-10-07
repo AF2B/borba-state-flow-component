@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-06
+
 ### Added
 
 - `request` takes `{:headers ... :body ...}`: a map or a collection is sent as JSON, with the JSON content type, and text as it is. The
@@ -37,5 +39,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 First release: `build-service`, `request`, `json-body` and `defflow` for Pedestal and state-flow.
 
-[Unreleased]: https://github.com/AF2B/borba-state-flow-component/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/AF2B/borba-state-flow-component/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/AF2B/borba-state-flow-component/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/AF2B/borba-state-flow-component/releases/tag/v0.1.0
