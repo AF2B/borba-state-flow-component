@@ -1,13 +1,72 @@
 {:paths ["src"]
 
  :deps
- {org.clojure/clojure          {:mvn/version "1.12.0"}
-  nubank/state-flow             {:mvn/version "5.20.1"}
-  io.pedestal/pedestal.service  {:mvn/version "0.7.0"}
-  cheshire/cheshire             {:mvn/version "5.12.0"}
-  integrant/integrant           {:mvn/version "0.8.1"}
+ {org.clojure/clojure          {:mvn/version "1.12.6"}
+  integrant/integrant          {:mvn/version "1.0.1"}
+  io.pedestal/pedestal.jetty   {:mvn/version "0.8.2"}
+  io.pedestal/pedestal.service {:mvn/version "0.8.2"}
+  metosin/jsonista             {:mvn/version "1.0.1"}
+  nubank/state-flow            {:mvn/version "5.20.1"}
 
-  borba/borba-routes-component
+  io.github.af2b/borba-interceptors-component
+  {:git/url "https://github.com/AF2B/borba-interceptors-component"
+   :git/tag "v1.1.0"
+   :git/sha "cdab325ea92dabe508c5cc10d54f36730d6fd65d"}
+
+  io.github.af2b/borba-handlers-component
+  {:git/url "https://github.com/AF2B/borba-handlers-component"
+   :git/tag "v2.0.0"
+   :git/sha "6d0c897cca357bca060248f9dcb2e91c526e35e1"}
+
+  io.github.af2b/borba-routes-component
   {:git/url "https://github.com/AF2B/borba-routes-component"
-   :git/tag "v0.1.0"
-   :git/sha "dbc251d223bbedb831d3d17a28d94eca95d741e2"}}}
+   :git/tag "v2.0.0"
+   :git/sha "7f4037dd289b8b2835ae53b32ed18c4993965b67"}
+
+  ;; Pedestal 0.8.2 brings Jackson 2.21.1 through transit-java, and jsonista
+  ;; 1.0.1 brings 2.22.2: both have high advisories (GHSA-7hhh-6rmp-j9qf,
+  ;; GHSA-p6pp-m3f8-5c89, GHSA-r7wm-3cxj-wff9, GHSA-cxp5-3px4-pw24 and
+  ;; GHSA-wv8q-qhhj-9h54), fixed in 2.22.3. Remove the three lines when the
+  ;; dependencies move to it.
+  com.fasterxml.jackson.core/jackson-core                {:mvn/version "2.22.3"}
+  com.fasterxml.jackson.core/jackson-databind            {:mvn/version "2.22.3"}
+  com.fasterxml.jackson.datatype/jackson-datatype-jsr310 {:mvn/version "2.22.3"}}
+
+ :aliases
+ {:test
+  {:extra-paths ["test"]
+   :extra-deps  {lambdaisland/kaocha    {:mvn/version "1.91.1392"}
+                 org.clojure/test.check {:mvn/version "1.1.3"}
+                 org.slf4j/slf4j-simple {:mvn/version "2.0.13"}}
+   :main-opts   ["-m" "kaocha.runner"]}
+
+  :coverage
+  {:extra-paths ["test"]
+   :extra-deps  {lambdaisland/kaocha           {:mvn/version "1.91.1392"}
+                 lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}
+                 org.clojure/test.check        {:mvn/version "1.1.3"}
+                 org.slf4j/slf4j-simple        {:mvn/version "2.0.13"}}
+   :main-opts   ["-m" "kaocha.runner" "--plugin" "cloverage"
+                 "--cov-fail-threshold" "80"
+                 "--cov-output" "target/coverage"
+                 "--focus" ":unit"]}
+
+  :lint
+  {:replace-deps {clj-kondo/clj-kondo {:mvn/version "2026.08.04"}}
+   :main-opts    ["-m" "clj-kondo.main" "--lint" "src" "test"
+                  "--fail-level" "warning"]}
+
+  :fmt
+  {:replace-deps {dev.weavejester/cljfmt {:mvn/version "0.16.6"}}
+   :main-opts    ["-m" "cljfmt.main"]}
+
+  :build
+  {:deps       {io.github.clojure/tools.build {:mvn/version "0.10.14"}}
+   :ns-default build
+   :exec-args  {:lib         io.github.af2b/borba-state-flow-component
+                :description "state-flow for the HTTP layer of a Borba service: flows that call the real handlers and routes in process, without a server."}}
+
+  :outdated
+  {:replace-deps {com.github.liquidz/antq {:mvn/version "2.11.1276"}}
+   :main-opts    ["-m" "antq.core" "--error-format"
+                  "{{name}} {{version}} -> {{latest-version}}"]}}}
