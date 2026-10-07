@@ -1,0 +1,4 @@
+;; Teaches clj-kondo about the macro of borba.flow. A project that depends on this
+;; library imports it with
+;;   clj-kondo --copy-configs --dependencies --lint "$(clojure -Spath -A:test)"
+{:hooks {:analyze-call {borba.flow/defflow borba.flow-hooks/defflow}}}
